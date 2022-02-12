@@ -16,14 +16,23 @@
         #canvas {
             display: block;
         }
+
+        #clear {
+            position: fixed;
+        }
     </style>
 </head>
 
 <body>
+    <button id="clear">清除画布</button>
     <canvas id="canvas"></canvas>
     <script>
 
         let canvas = document.getElementById("canvas");
+        let but = document.getElementById("clear");
+        clear.onclick = function () {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
         canvas.width = document.documentElement.clientWidth;
         canvas.height = document.documentElement.clientHeight;
         let ctx = canvas.getContext('2d');
