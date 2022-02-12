@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        #canvas {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        let canvas = document.getElementById("canvas");
+        canvas.width = document.documentElement.clientWidth;
+        canvas.height = document.documentElement.clientHeight;
+        let ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = "rgb(200,0,0)";
+        let bi = false;
+        //鼠标摁下
+        canvas.onmousedown = (e) => {
+            bi = true;
+            console.log(1);
+        }
+        canvas.onmousemove = (e) => {
+            console.log("");
+            if (bi) {
+                // ctx.fillRect(e.clientX - 5, e.clientY - 5, 10, 10);
+                ctx.beginPath();
+                ctx.arc(e.clientX, e.clientY, 10, 0, Math.PI * 2, false);
+                ctx.fill()
+                ctx.stroke();
+            }
+        }
+        //鼠标抬起
+        canvas.onmouseup = (e) => {
+            bi = false;
+            console.log(0);
+        }
+        //onclick事件是包含鼠标摁下和抬起的  要使用onmousedown事件（鼠标摁下）
+    </script>
+
+
+
+
+
+</body>
+
+</html>
