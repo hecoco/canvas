@@ -28,34 +28,50 @@
         let ctx = canvas.getContext('2d');
 
         ctx.fillStyle = "rgb(200,0,0)";
+        ctx.strokeStyle = "none";
         let bi = false;
-        //鼠标摁下
-        canvas.onmousedown = (e) => {
-            bi = true;
-            console.log(1);
-        }
-        canvas.onmousemove = (e) => {
-            console.log("");
-            if (bi) {
-                // ctx.fillRect(e.clientX - 5, e.clientY - 5, 10, 10);
+        //是否有触屏事件
+        var isTouchDevice = 'ontouchstart' in document.documentElement;
+        if (isTouchDevice) {
+            console.log("1")
+            canvas.ontouchmove = (e) => {
+                let x = e.touches[0].clientX;
+                let y = e.touches[0].clientY;
                 ctx.beginPath();
-                ctx.arc(e.clientX, e.clientY, 10, 0, Math.PI * 2, false);
-                ctx.fill()
+                ctx.arc(x, y, 10, 0, Math.PI * 2);
                 ctx.stroke();
+                ctx.fill()
             }
+        } else {
+            //鼠标摁下
+            canvas.onmousedown = () => {
+                bi = true;
+                console.log("摁下");
+            }
+
+            canvas.onmousemove = (e) => {
+                if (bi === true) {
+                    console.log("移动中");
+                    // ctx.fillRect(e.clientX - 5, e.clientY - 5, 10, 10);
+                    ctx.beginPath();
+                    ctx.arc(e.clientX, e.clientY, 10, 0, Math.PI * 2);
+                    ctx.stroke();
+                    ctx.fill()
+                }
+            }
+
+            canvas.onmouseout = () => {
+                console.log("鼠标出去了");
+                bi = false;
+            }
+            //鼠标抬起
+            canvas.onmouseup = () => {
+                bi = false;
+                console.log("抬起");
+            }
+            //onclick事件是包含鼠标摁下和抬起的  要使用onmousedown事件（鼠标摁下）
         }
-        //鼠标抬起
-        canvas.onmouseup = (e) => {
-            bi = false;
-            console.log(0);
-        }
-        //onclick事件是包含鼠标摁下和抬起的  要使用onmousedown事件（鼠标摁下）
     </script>
-
-
-
-
-
 </body>
 
 </html>
