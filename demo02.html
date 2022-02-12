@@ -79,7 +79,7 @@
             canvas.ontouchmove = (e) => {
                 if (onoffrubber === true) {
                     console.log("使用橡皮擦");
-                    ctx.clearRect(e.clientX, e.clientY, 8, 8);
+                    ctx.clearRect(e.touches[0].clientX, e.touches[0].clientY, 8, 8);
                 } else {
                     console.log("开始画");
                     let x = e.touches[0].clientX;
