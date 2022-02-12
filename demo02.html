@@ -17,22 +17,26 @@
             display: block;
         }
 
-        #clear {
+        #fatures {
             position: fixed;
         }
     </style>
 </head>
 
 <body>
-    <button id="clear">清除画布</button>
+    <div id="fatures">
+        <button id="clear">清除画布</button>
+        <button id="rubber">橡皮擦</button>
+        <button id="brush">画笔</button>
+    </div>
     <canvas id="canvas"></canvas>
     <script>
 
         let canvas = document.getElementById("canvas");
-        let but = document.getElementById("clear");
-        clear.onclick = function () {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
+        // let but = document.getElementsById("clear");
+        // let rubber = document.getElementsById("rubber");
+        // let but = document.getElementsById("brush");
+
         canvas.width = document.documentElement.clientWidth;
         canvas.height = document.documentElement.clientHeight;
         let ctx = canvas.getContext('2d');
@@ -42,10 +46,27 @@
         ctx.lineWidth = 8;
         ctx.lineCap = "round";
 
-
-
         let bi = false;
         let list;
+        let onoffrubber = false;//是否启用橡皮擦
+
+        //清除画布
+        clear.onclick = function () {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        //开启橡皮擦
+        rubber.onclick = function () {
+            onoffrubber = true;
+        }
+        //画笔   取消橡皮擦
+        brush.onclick = function () {
+            onoffrubber = false;
+        }
+
+
+
+
+
         //是否有触屏事件
         var isTouchDevice = 'ontouchstart' in document.documentElement;
         if (isTouchDevice) {
@@ -56,15 +77,20 @@
                 list = [x, y];
             }
             canvas.ontouchmove = (e) => {
-                console.log("开始画");
-                let x = e.touches[0].clientX;
-                let y = e.touches[0].clientY;
-                // ctx.beginPath();
-                // ctx.arc(x, y, 10, 0, Math.PI * 2);
-                // ctx.stroke();
-                // ctx.fill()
-                drawLine(list[0], list[1], x, y);
-                list = [x, y];
+                if (onoffrubber === true) {
+                    console.log("使用橡皮擦");
+                    ctx.clearRect(e.clientX, e.clientY, 8, 8);
+                } else {
+                    console.log("开始画");
+                    let x = e.touches[0].clientX;
+                    let y = e.touches[0].clientY;
+                    // ctx.beginPath();
+                    // ctx.arc(x, y, 10, 0, Math.PI * 2);
+                    // ctx.stroke();
+                    // ctx.fill()
+                    drawLine(list[0], list[1], x, y);
+                    list = [x, y];
+                }
             }
         } else {
             //鼠标摁下
@@ -76,15 +102,20 @@
 
             canvas.onmousemove = (e) => {
                 if (bi === true) {
-                    console.log("移动中");
-                    // ctx.fillRect(e.clientX - 5, e.clientY - 5, 10, 10);
+                    if (onoffrubber === true) {//判断是否使用了橡皮擦
+                        console.log("使用橡皮擦");
+                        ctx.clearRect(e.clientX, e.clientY, 8, 8);
+                    } else {
+                        console.log("移动中");
+                        // ctx.fillRect(e.clientX - 5, e.clientY - 5, 10, 10);
 
-                    // ctx.beginPath();
-                    // ctx.arc(e.clientX, e.clientY, 10, 0, Math.PI * 2);
-                    // ctx.stroke();
-                    // ctx.fill()
-                    drawLine(list[0], list[1], e.clientX, e.clientY)//记录上一次的坐标和现在的坐标连起来
-                    list = [e.clientX, e.clientY]//画了之后更新坐标
+                        // ctx.beginPath();
+                        // ctx.arc(e.clientX, e.clientY, 10, 0, Math.PI * 2);
+                        // ctx.stroke();
+                        // ctx.fill()
+                        drawLine(list[0], list[1], e.clientX, e.clientY)//记录上一次的坐标和现在的坐标连起来
+                        list = [e.clientX, e.clientY]//画了之后更新坐标
+                    }
                 }
             }
 
