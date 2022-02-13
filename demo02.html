@@ -46,7 +46,7 @@
         ctx.lineWidth = 8;
         ctx.lineCap = "round";
 
-        let bi = false;
+        let bi = false;//监听鼠标摁下抬起
         let list;
         let onoffrubber = false;//是否启用橡皮擦
 
@@ -56,16 +56,16 @@
         }
         //开启橡皮擦
         rubber.onclick = function () {
+            console.log("橡皮擦");
+            ctx.globalCompositeOperation = "destination-out";//此属性改变绘图模式   擦出
             onoffrubber = true;
         }
         //画笔   取消橡皮擦
         brush.onclick = function () {
+            console.log("画笔工具");
+            ctx.globalCompositeOperation = "source-over";//此属性改变绘图模式  正常
             onoffrubber = false;
         }
-
-
-
-
 
         //是否有触屏事件
         var isTouchDevice = 'ontouchstart' in document.documentElement;
@@ -77,26 +77,20 @@
                 list = [x, y];
             }
             canvas.ontouchmove = (e) => {
-                if (onoffrubber === true) {
-                    console.log("使用橡皮擦");
-                    // ctx.clearRect(e.touches[0].clientX, e.touches[0].clientY, 8, 8);
-                    ctx.globalCompositeOperation = "destination-out";//此属性改变绘图模式   擦出
-                    drawLine(list[0], list[1], e.touches[0].clientX, e.touches[0].clientY)
-                    list = [e.touches[0].clientX, e.touches[0].clientY]
-                } else {
-                    console.log("开始画");
-                    ctx.globalCompositeOperation = "source-over";
-                    let x = e.touches[0].clientX;
-                    let y = e.touches[0].clientY;
-                    // ctx.beginPath();
-                    // ctx.arc(x, y, 10, 0, Math.PI * 2);
-                    // ctx.stroke();
-                    // ctx.fill()
-                    drawLine(list[0], list[1], x, y);
-                    list = [x, y];
-                }
+                // ctx.clearRect(e.touches[0].clientX, e.touches[0].clientY, 8, 8);
+
+                ctx.globalCompositeOperation = "source-over";
+                let x = e.touches[0].clientX;
+                let y = e.touches[0].clientY;
+                // ctx.beginPath();
+                // ctx.arc(x, y, 10, 0, Math.PI * 2);
+                // ctx.stroke();
+                // ctx.fill()
+                drawLine(list[0], list[1], x, y);
+                list = [x, y];
             }
         } else {
+            console.log("我进入了第一层循环");
             //鼠标摁下
             canvas.onmousedown = (e) => {
                 bi = true;
@@ -106,24 +100,16 @@
 
             canvas.onmousemove = (e) => {
                 if (bi === true) {
-                    if (onoffrubber === true) {//判断是否使用了橡皮擦
-                        console.log("使用橡皮擦");
-                        // ctx.clearRect(e.clientX, e.clientY, 8, 8);
-                        ctx.globalCompositeOperation = "destination-out";//此属性改变绘图模式   擦出
-                        drawLine(list[0], list[1], e.clientX, e.clientY)
-                        list = [e.clientX, e.clientY]
-                    } else {
-                        console.log("移动中");
-                        // ctx.fillRect(e.clientX - 5, e.clientY - 5, 10, 10);
+                    console.log("我进入了第二层循环");
+                    console.log("移动中");
+                    // ctx.fillRect(e.clientX - 5, e.clientY - 5, 10, 10);
 
-                        // ctx.beginPath();
-                        // ctx.arc(e.clientX, e.clientY, 10, 0, Math.PI * 2);
-                        // ctx.stroke();
-                        // ctx.fill()
-                        ctx.globalCompositeOperation = "source-over";//此属性改变绘图模式  正常
-                        drawLine(list[0], list[1], e.clientX, e.clientY)//记录上一次的坐标和现在的坐标连起来
-                        list = [e.clientX, e.clientY]//画了之后更新坐标
-                    }
+                    // ctx.beginPath();
+                    // ctx.arc(e.clientX, e.clientY, 10, 0, Math.PI * 2);
+                    // ctx.stroke();
+                    // ctx.fill()
+                    drawLine(list[0], list[1], e.clientX, e.clientY)//记录上一次的坐标和现在的坐标连起来
+                    list = [e.clientX, e.clientY]//画了之后更新坐标
                 }
             }
 
