@@ -3,3 +3,5 @@
 实现功能：
 1. 清屏
 2. 橡皮擦
+
+yarn global add http-server

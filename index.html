@@ -28,14 +28,12 @@
         <button id="clear">清除画布</button>
         <button id="rubber">橡皮擦</button>
         <button id="brush">画笔</button>
+        <button id="download">下载</button>
     </div>
     <canvas id="canvas"></canvas>
     <script>
 
         let canvas = document.getElementById("canvas");
-        // let but = document.getElementsById("clear");
-        // let rubber = document.getElementsById("rubber");
-        // let but = document.getElementsById("brush");
 
         canvas.width = document.documentElement.clientWidth;
         canvas.height = document.documentElement.clientHeight;
@@ -56,15 +54,20 @@
         }
         //开启橡皮擦
         rubber.onclick = function () {
-            console.log("橡皮擦");
             ctx.globalCompositeOperation = "destination-out";//此属性改变绘图模式   擦出
             onoffrubber = true;
         }
         //画笔   取消橡皮擦
         brush.onclick = function () {
-            console.log("画笔工具");
             ctx.globalCompositeOperation = "source-over";//此属性改变绘图模式  正常
             onoffrubber = false;
+        }
+        download.onclick=()=>{
+            let url =canvas.toDataURL();
+            let a = document.createElement('a')
+            a.download = "myPainting.png"
+            a.href = url
+            a.click()
         }
 
         //是否有触屏事件
@@ -77,50 +80,32 @@
                 list = [x, y];
             }
             canvas.ontouchmove = (e) => {
-                // ctx.clearRect(e.touches[0].clientX, e.touches[0].clientY, 8, 8);
-
                 ctx.globalCompositeOperation = "source-over";
                 let x = e.touches[0].clientX;
                 let y = e.touches[0].clientY;
-                // ctx.beginPath();
-                // ctx.arc(x, y, 10, 0, Math.PI * 2);
-                // ctx.stroke();
-                // ctx.fill()
                 drawLine(list[0], list[1], x, y);
                 list = [x, y];
             }
         } else {
-            console.log("我进入了第一层循环");
             //鼠标摁下
             canvas.onmousedown = (e) => {
                 bi = true;
-                console.log("摁下");
                 list = [e.clientX, e.clientY]//鼠标点击后记录坐标
             }
 
             canvas.onmousemove = (e) => {
                 if (bi === true) {
-                    console.log("我进入了第二层循环");
-                    console.log("移动中");
-                    // ctx.fillRect(e.clientX - 5, e.clientY - 5, 10, 10);
-
-                    // ctx.beginPath();
-                    // ctx.arc(e.clientX, e.clientY, 10, 0, Math.PI * 2);
-                    // ctx.stroke();
-                    // ctx.fill()
                     drawLine(list[0], list[1], e.clientX, e.clientY)//记录上一次的坐标和现在的坐标连起来
                     list = [e.clientX, e.clientY]//画了之后更新坐标
                 }
             }
 
             canvas.onmouseout = () => {
-                console.log("鼠标出去了");
                 bi = false;
             }
             //鼠标抬起
             canvas.onmouseup = () => {
                 bi = false;
-                console.log("抬起");
             }
             //onclick事件是包含鼠标摁下和抬起的  要使用onmousedown事件（鼠标摁下）
 
